@@ -8,7 +8,8 @@ import {
     getDocs,
     query,
     orderBy,
-    limit
+    limit,
+    where
 } from "firebase/firestore";
 import { Event, eventConverter } from "../models/Event.js";
 import { verifyTokenArtist } from "./verifyToken.js";
@@ -49,8 +50,33 @@ router.get("/find/:eventId", async (req, res) => {
     }
 })
 
+
+
+
+// Read Billboard Content
+router.get("/billboard/", async (req, res) => {
+    const webQuery = req.query.name;
+    console.log("read billboard: " + webQuery)
+    try {
+        const q = query(collection(db, "events"), where("billboard", "array-contains", webQuery))
+        console.log("q setup success")
+        const docSnap = await getDocs(q);
+        console.log("docSnap success")
+        // reformat json into list
+        const formatList = [];
+        docSnap.forEach((doc) => {
+            formatList.push({ id: doc.id, ...doc.data() })
+        });
+        console.log(formatList)
+        res.status(200).json(formatList);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+})
+
 // Read All
 router.get("/", async (req, res) => {
+    console.log("here read all")
     const webQuery = req.query.limit;
     try {
         const q = webQuery ?
