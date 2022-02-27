@@ -8,7 +8,7 @@ import ticketRoute from "./routes/ticket.js"
 import stripeRoute from "./routes/stripe.js"
 import { Timestamp } from 'firebase/firestore';
 import cors from 'cors';
-
+// git test
 dotenv.config();
 
 app.use(cors());
