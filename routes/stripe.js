@@ -13,7 +13,7 @@ router.post("/", (req, res) => {
         {
             source: req.body.tokenId,
             amount: req.body.amount,
-            currency: "myr",
+            currency: "usd",
         }, (stripeErr, stripeRes) => {
             if (stripeErr) {
                 console.log("bad ruka")
