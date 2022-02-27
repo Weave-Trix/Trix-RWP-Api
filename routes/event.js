@@ -50,9 +50,6 @@ router.get("/find/:eventId", async (req, res) => {
     }
 })
 
-
-
-
 // Read Billboard Content
 router.get("/billboard/", async (req, res) => {
     const webQuery = req.query.name;
@@ -67,7 +64,26 @@ router.get("/billboard/", async (req, res) => {
         docSnap.forEach((doc) => {
             formatList.push({ id: doc.id, ...doc.data() })
         });
-        console.log(formatList)
+        res.status(200).json(formatList);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+})
+
+// Read Artist's Event
+router.get("/artist/", async (req, res) => {
+    const webQuery = req.query.id;
+    console.log("get event for artist : " + webQuery)
+    try {
+        const q = query(collection(db, "events"), where("artistId", "==", webQuery))
+        console.log("q setup success")
+        const docSnap = await getDocs(q);
+        console.log("docSnap success")
+        // reformat json into list
+        const formatList = [];
+        docSnap.forEach((doc) => {
+            formatList.push({ id: doc.id, ...doc.data() })
+        });
         res.status(200).json(formatList);
     } catch (err) {
         res.status(500).json(err);
