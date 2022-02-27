@@ -21,7 +21,6 @@ router.post("/register", (req, res) => {
         await addDoc(usersCollectionRef,
             new User(
                 req.body.username,
-                req.body.email,
                 cryptoJs.AES.encrypt(req.body.password, process.env.PW_SEC).toString()
             )
         );

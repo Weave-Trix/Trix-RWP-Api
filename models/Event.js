@@ -2,7 +2,7 @@ import { Timestamp } from 'firebase/firestore';
 
 class Event {
     constructor(
-        title, description, coverPhoto, startTime, endTime, location, artistId, artist, price, ticketQuantity, billboard, payment
+        title, description, coverPhoto, startTime, endTime, location, artistId, artist, price, ticketQuantity, billboard, payment, soldTicketList=[]
     ) {
         this.title = title;
         this.description = description;
@@ -16,6 +16,7 @@ class Event {
         this.artist = artist;
         this.price = price;
         this.ticketQuantity = ticketQuantity;
+        this.soldTicketList = soldTicketList;
         this.billboard = billboard;
         this.payment = payment;
     }
@@ -38,10 +39,15 @@ const eventConverter = {
             artist: event.artist,
             price: Number(event.price),
             ticketQuantity: event.ticketQuantity,
-            soldTicketList: [],
+            soldTicketList: event.soldTicketList,
             billboard: event.billboard,
             payment: event.payment
         }
+    },
+    fromFirestore: (snapshot, options) => {
+        const data = snapshot.data(options);
+        return new Event(data.title, data.description, data.coverPhoto, data.startTime, data.endTime, data.location,
+            data.artistId, data.artist, data.artist, data.price, data.ticketQuantity, data.soldTicketList, data.billboard, data.payment)
     }
 }
 

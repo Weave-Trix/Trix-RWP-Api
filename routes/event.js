@@ -9,7 +9,8 @@ import {
     query,
     orderBy,
     limit,
-    where
+    where,
+    setDoc
 } from "firebase/firestore";
 import { Event, eventConverter } from "../models/Event.js";
 import { verifyTokenArtist } from "./verifyToken.js";
@@ -18,16 +19,17 @@ const router = express.Router();
 const eventsCollectionRef = collection(db, "events").withConverter(eventConverter);
 
 // Create
-router.post("/", (req, res) => {
-    const createEvent = async () => {
-        console.log("creating with body: " + req.body)
-        await addDoc(eventsCollectionRef,
-            req.body
-        );
-    }
+router.post("/", async (req, res) => {
+    console.log("creating event");
     try {
-        createEvent();
-        res.status(201).json(req.body);
+        console.log("creating with body: " + req.body)
+        addDoc(eventsCollectionRef, req.body).then(async (event) => {
+            const docSnap = await getDoc(doc(db, "events", event.id));
+            const formatList = [];
+            formatList.push({ id: docSnap.id, ...docSnap.data()})
+            res.status(200).json(formatList);
+        })
+
     } catch (err) {
         res.status(500).json(err);
     }

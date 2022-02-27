@@ -20,7 +20,6 @@ router.post("/", (req, res) => {
                 console.log(stripeErr)
                 res.status(500).json(stripeErr);
             } else {
-                console.log(stripeRes + "stripe success...")
                 res.status(200).json(stripeRes);
             }
         }
