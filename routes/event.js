@@ -10,7 +10,8 @@ import {
     orderBy,
     limit,
     where,
-    setDoc
+    setDoc,
+    deleteDoc
 } from "firebase/firestore";
 import { Event, eventConverter } from "../models/Event.js";
 import { verifyTokenArtist } from "./verifyToken.js";
@@ -112,6 +113,13 @@ router.get("/", async (req, res) => {
     } catch (err) {
         res.status(500).json(err);
     }
+})
+
+router.delete("/delete/:eventId", async (req, res) => {
+    console.log("delete event")
+    await deleteDoc(doc(db, "events", req.params.eventId))
+    console.log("successfully deleted : " + req.params.eventId)
+    res.status(200)
 })
 
 
