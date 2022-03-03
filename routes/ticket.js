@@ -20,7 +20,7 @@ router.post("/forge/:eventId", async (req, res) => {
             }
         ).then(docRef => {
             console.log(docRef.id);
-            formatList.push({ticketId: doc.id, ...req.body});
+            formatList.push({ticketId: docRef.id, ...req.body});
             try {
                 updateUserTicketList(req.body.userId, docRef.id)
                 console.log("Ticket successfully assigned to user");
