@@ -6,13 +6,13 @@ import { Ticket, ticketConverter } from "../models/Ticket.js";
 
 const router = express.Router();
 const ticketCollectionRef = collection(db, "tickets");
-const formatList = [];
 // Create
 router.post("/forge/:eventId", async (req, res) => {
     console.log("forging ticket");
+    const formatList = [];
     const createTicket = async () => {
         console.log("forging ticket for event, where event id => " + req.params.eventId)
-        await addDoc(ticketCollectionRef,
+        const docSnap = await addDoc(ticketCollectionRef,
             {
                 event: req.body.event,
                 payment: req.body.payment,
@@ -20,7 +20,7 @@ router.post("/forge/:eventId", async (req, res) => {
             }
         ).then(docRef => {
             console.log(docRef.id);
-            formatList.push({ticketId: docRef.id, ...req.body});
+            formatList.push({ticketId: docSnap.id, ...req.body});
             try {
                 updateUserTicketList(req.body.userId, docRef.id)
                 console.log("Ticket successfully assigned to user");
