@@ -17,7 +17,6 @@ const userConverter = {
             isAdmin: false,
             isArtist: false,
             myTicketList: [],
-            artistEventList: [],
         };
     }
 }
